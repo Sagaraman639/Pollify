@@ -15,7 +15,12 @@ import {
 
 import api from "../services/api";
 
-const socket = io("http://localhost:5000");
+const socket = io(
+  import.meta.env.VITE_API_URL.replace(
+    "/api",
+    ""
+  )
+);
 const COLORS = ["#10b981", "#0ea5e9", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#14b8a6", "#f97316"];
 
 const AnalyticsPage = () => {
