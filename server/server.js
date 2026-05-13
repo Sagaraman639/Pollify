@@ -5,6 +5,14 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const { Server } = require("socket.io");
 const connectDB = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
+const pollRoutes = require("./routes/pollRoutes");
+const responseRoutes = require(
+  "./routes/responseRoutes"
+);
+const analyticsRoutes = require(
+  "./routes/analyticsRoutes"
+);
 
 dotenv.config();
 connectDB();
@@ -20,6 +28,8 @@ const io = new Server(server, {
   }
 });
 
+app.set("io", io);
+
 app.use(cors({
   origin: "http://localhost:5173",
   credentials: true
@@ -28,8 +38,22 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+app.use("/api/auth", authRoutes);
+app.use("/api/polls", pollRoutes);
+app.use("/api/responses", responseRoutes);
+app.use("/api/analytics",analyticsRoutes);
+
 io.on("connection", (socket) => {
+
   console.log("User connected:", socket.id);
+
+  socket.on("join_poll", (pollId) => {
+    socket.join(pollId);
+
+    console.log(
+      `Socket joined poll room: ${pollId}`
+    );
+  });
 
   socket.on("disconnect", () => {
     console.log("User disconnected");
