@@ -271,13 +271,13 @@ const HomePage = () => {
           <div className={pageShell}>
             <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center xl:gap-20">
               <div>
-                <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
+                <p className="text-sm font-black uppercase tracking-[0.18em] !text-emerald-300">
                   Use cases
                 </p>
-                <h2 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl">
+                <h2 className="mt-4 text-4xl font-black tracking-tight !text-white sm:text-5xl">
                   A quick poll can move a serious decision forward.
                 </h2>
-                <p className="mt-6 max-w-xl text-base leading-8 text-slate-300">
+                <p className="mt-6 max-w-xl text-base leading-8 !text-slate-300">
                   From team planning to customer discovery, Pollify gives you a lightweight
                   way to capture the opinion that would otherwise stay scattered.
                 </p>
@@ -287,7 +287,7 @@ const HomePage = () => {
                 {useCases.map((item) => (
                   <div
                     key={item}
-                    className="rounded-xl border border-white/10 bg-white/[0.06] px-6 py-5 text-sm font-black text-white shadow-sm"
+                    className="rounded-xl border border-white/15 bg-white/[0.08] px-6 py-5 text-sm font-black text-white shadow-sm transition hover:border-emerald-300/40 hover:bg-white/[0.12]"
                   >
                     {item}
                   </div>
@@ -326,7 +326,7 @@ const HomePage = () => {
           <div>
             <p className="text-lg font-black text-slate-950">Pollify</p>
             <p className="mt-1 text-sm text-slate-500">
-              Production-ready polling for quick, confident decisions.
+              From feedback to confident decisions — instantly.
             </p>
           </div>
           <p className="text-sm font-semibold text-slate-500">

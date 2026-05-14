@@ -81,12 +81,34 @@ const PublicResults = () => {
           </button>
         </div>
 
-        <section className="mb-8 rounded-2xl border border-slate-200 bg-slate-950 p-8 text-white shadow-xl shadow-slate-950/15">
-          <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-300">
-            Total Responses
-          </p>
-          <h2 className="mt-3 text-6xl font-black text-white">{results.totalResponses}</h2>
-          <p className="mt-3 text-sm text-slate-300">people have responded</p>
+        <section className="mb-8 overflow-hidden rounded-2xl border border-emerald-200 bg-white shadow-xl shadow-slate-950/8">
+          <div className="grid gap-0 lg:grid-cols-[1fr_auto]">
+            <div className="p-8 sm:p-10">
+              <p className="text-sm font-black uppercase tracking-[0.18em] !text-emerald-700">
+                Total Responses
+              </p>
+              <div className="mt-5 flex flex-col gap-4 sm:flex-row sm:items-end">
+                <h2 className="text-7xl font-black leading-none tracking-tight !text-slate-950 sm:text-8xl">
+                  {results.totalResponses}
+                </h2>
+                <p className="pb-2 text-base font-semibold leading-7 !text-slate-600">
+                  people have responded
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-emerald-100 bg-emerald-50 p-8 sm:p-10 lg:min-w-80 lg:border-l lg:border-t-0">
+              <p className="text-sm font-black uppercase tracking-[0.18em] !text-emerald-800">
+                Published
+              </p>
+              <p className="mt-4 text-2xl font-black leading-8 !text-slate-950">
+                Final results are available
+              </p>
+              <p className="mt-3 text-sm leading-7 !text-slate-600">
+                New visitors can view this response summary from the shared poll link.
+              </p>
+            </div>
+          </div>
         </section>
 
         <div className="space-y-7">
@@ -103,10 +125,10 @@ const PublicResults = () => {
                     {index + 1}
                   </span>
                   <div>
-                    <h2 className="text-2xl font-black text-slate-950">
+                    <h2 className="text-2xl font-black !text-slate-950">
                       {question.questionText}
                     </h2>
-                    <p className="mt-2 text-sm font-semibold text-slate-500">
+                    <p className="mt-2 text-sm font-semibold !text-slate-500">
                       Total votes for this question: {totalVotes}
                     </p>
                   </div>
