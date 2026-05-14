@@ -231,30 +231,60 @@ const CreatePoll = () => {
                 />
               </div>
 
-              <label
-                className={`flex cursor-pointer items-center justify-between gap-4 rounded-xl border p-4 transition ${
-                  isAnonymous
-                    ? "border-emerald-300 bg-emerald-50"
-                    : "border-slate-200 bg-slate-50 hover:border-slate-300"
-                }`}
-              >
-                <span>
-                  <span className="block text-sm font-black text-slate-900">
-                    Anonymous responses
-                  </span>
-                  <span className="mt-1 block text-sm font-semibold text-slate-500">
-                    Keep voters private when they submit this poll.
-                  </span>
-                </span>
-                <input
-                  id="anonymous"
-                  type="checkbox"
-                  checked={isAnonymous}
-                  onChange={() => setIsAnonymous(!isAnonymous)}
-                  className="peer sr-only"
-                />
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 border-slate-300 bg-white text-sm font-black text-white transition after:content-['✓'] after:opacity-0 peer-checked:border-emerald-500 peer-checked:bg-emerald-500 peer-checked:after:opacity-100" />
-              </label>
+              <div>
+                <p className="mb-3 text-sm font-black text-slate-900">
+                  Response access
+                </p>
+                <div className="grid gap-3">
+                  <label
+                    className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition ${
+                      isAnonymous
+                        ? "border-emerald-300 bg-emerald-50"
+                        : "border-slate-200 bg-slate-50 hover:border-slate-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="responseAccess"
+                      checked={isAnonymous}
+                      onChange={() => setIsAnonymous(true)}
+                      className="mt-1 h-4 w-4 accent-emerald-600"
+                    />
+                    <span>
+                      <span className="block text-sm font-black text-slate-900">
+                        Allow anonymous responses
+                      </span>
+                      <span className="mt-1 block text-sm font-semibold text-slate-500">
+                        Anyone with the poll link can submit without logging in.
+                      </span>
+                    </span>
+                  </label>
+
+                  <label
+                    className={`flex cursor-pointer items-start gap-4 rounded-xl border p-4 transition ${
+                      !isAnonymous
+                        ? "border-emerald-300 bg-emerald-50"
+                        : "border-slate-200 bg-slate-50 hover:border-slate-300"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="responseAccess"
+                      checked={!isAnonymous}
+                      onChange={() => setIsAnonymous(false)}
+                      className="mt-1 h-4 w-4 accent-emerald-600"
+                    />
+                    <span>
+                      <span className="block text-sm font-black text-slate-900">
+                        Require authenticated responses
+                      </span>
+                      <span className="mt-1 block text-sm font-semibold text-slate-500">
+                        Respondents must sign in before submitting this poll.
+                      </span>
+                    </span>
+                  </label>
+                </div>
+              </div>
             </div>
           </section>
 
