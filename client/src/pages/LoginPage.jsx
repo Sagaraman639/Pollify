@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
 const LoginPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
+  const redirectPath = location.state?.from || "/dashboard";
 
   const [formData, setFormData] = useState({
     email: "",
@@ -30,7 +32,7 @@ const LoginPage = () => {
 
     try {
       await login(formData);
-      navigate("/dashboard");
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       setError(error.response?.data?.message || "Login failed");
       setLoading(false);
@@ -124,7 +126,11 @@ const LoginPage = () => {
 
           <p className="mt-6 text-center text-sm font-semibold text-slate-600">
             Do not have an account?{" "}
-            <Link to="/register" className="font-black text-emerald-700 hover:text-emerald-800">
+            <Link
+              to="/register"
+              state={{ from: redirectPath }}
+              className="font-black text-emerald-700 hover:text-emerald-800"
+            >
               Create one
             </Link>
           </p>

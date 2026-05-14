@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
+import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 
 const PublicPoll = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { user, loading: authLoading } = useAuth();
 
   const [poll, setPoll] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -89,6 +91,11 @@ const PublicPoll = () => {
       return;
     }
 
+    if (!poll.isAnonymous && !user) {
+      showToast("Please sign in before submitting this authenticated poll.");
+      return;
+    }
+
     const unansweredRequiredQuestion = poll.questions.find(
       (question) =>
         question.isRequired &&
@@ -153,6 +160,8 @@ const PublicPoll = () => {
   }
 
   const isExpired = new Date() > new Date(poll.expiresAt);
+  const requiresLogin = !poll.isAnonymous && !user;
+  const returnToPoll = `/poll/${id}`;
   const answeredCount = poll.questions.filter((question) =>
     answers.some((answer) => answer.questionId === question._id)
   ).length;
@@ -172,6 +181,53 @@ const PublicPoll = () => {
           <p className="mt-4 text-sm leading-7 text-slate-600">
             Your response has been submitted successfully.
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!poll.isAnonymous && authLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-stone-50 px-6 text-slate-950">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl shadow-slate-950/8">
+          <div className="mx-auto mb-5 h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-emerald-500" />
+          <h1 className="text-2xl font-black">Checking access...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (requiresLogin) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-stone-50 px-6 py-10 text-slate-950">
+        <div className="w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-xl shadow-slate-950/8 sm:p-10">
+          <p className="text-sm font-black uppercase tracking-[0.18em] !text-emerald-700">
+            Login required
+          </p>
+          <h1 className="mt-4 text-3xl font-black tracking-tight !text-slate-950">
+            This is an authenticated poll.
+          </h1>
+          <p className="mt-4 text-base leading-8 !text-slate-600">
+            Please sign in or create an account before submitting your response.
+            Your vote will be linked to your account and duplicate submissions will be blocked.
+          </p>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Link
+              to="/login"
+              state={{ from: returnToPoll }}
+              className="inline-flex min-h-13 items-center justify-center rounded-lg bg-slate-950 px-7 py-4 text-sm font-black text-white shadow-xl shadow-slate-950/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
+            >
+              Sign in to answer
+            </Link>
+            <Link
+              to="/register"
+              state={{ from: returnToPoll }}
+              className="inline-flex min-h-13 items-center justify-center rounded-lg border border-slate-300 bg-white px-7 py-4 text-sm font-black text-slate-800 transition hover:-translate-y-0.5 hover:bg-slate-50"
+            >
+              Create account
+            </Link>
+          </div>
         </div>
       </div>
     );

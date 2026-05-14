@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
 const RegisterPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { register } = useAuth();
+  const redirectPath = location.state?.from || "/dashboard";
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,7 +33,7 @@ const RegisterPage = () => {
 
     try {
       await register(formData);
-      navigate("/dashboard");
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       setError(error.response?.data?.message || "Registration failed");
       setLoading(false);
@@ -140,7 +142,11 @@ const RegisterPage = () => {
 
           <p className="mt-6 text-center text-sm font-semibold text-slate-600">
             Already have an account?{" "}
-            <Link to="/login" className="font-black text-emerald-700 hover:text-emerald-800">
+            <Link
+              to="/login"
+              state={{ from: redirectPath }}
+              className="font-black text-emerald-700 hover:text-emerald-800"
+            >
               Sign in
             </Link>
           </p>
