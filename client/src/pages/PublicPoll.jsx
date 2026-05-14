@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import api from "../services/api";
 
 const PublicPoll = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
 
   const [poll, setPoll] = useState(null);
@@ -18,19 +19,37 @@ const PublicPoll = () => {
   };
 
   useEffect(() => {
+    let isMounted = true;
+
     const fetchPoll = async () => {
       try {
         const res = await api.get(`/polls/${id}`);
+
+        if (res.data?.resultsPublished) {
+          navigate(`/results/${id}`, { replace: true });
+          return;
+        }
+
+        if (!isMounted) {
+          return;
+        }
+
         setPoll(res.data);
       } catch (error) {
         console.log(error);
       }
 
-      setLoading(false);
+      if (isMounted) {
+        setLoading(false);
+      }
     };
 
     fetchPoll();
-  }, [id]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id, navigate]);
 
   const handleSelect = (questionId, option) => {
     const existing = answers.find((a) => a.questionId === questionId);
@@ -62,6 +81,11 @@ const PublicPoll = () => {
 
     if (poll && new Date() > new Date(poll.expiresAt)) {
       showToast("This poll has expired.");
+      return;
+    }
+
+    if (poll?.resultsPublished) {
+      navigate(`/results/${id}`, { replace: true });
       return;
     }
 
